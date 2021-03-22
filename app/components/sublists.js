@@ -28,7 +28,7 @@ const Item = ({ data }) => {
         {
           Boolean(pRest.length) && 
           pRest.map( p => (
-            <View key={p.id} style={styles.audioBlock}>
+            <View key={p.id} style={styles.soundContainer}>
               <Image 
                 style={styles.image} 
                 source={{
@@ -39,12 +39,29 @@ const Item = ({ data }) => {
           ))
         }
       </ScrollView>
-      <View style={styles.listContainer}>
+      <View style={styles.nodeContainer}>
           <View style={styles.dotContainer}>
             <View style={styles.vDividerTop}></View>
             <FontAwesomeIcon icon={ faDotCircle } style={styles.dotCircle} />
             <View style={styles.vDividerBottom}></View>
+            { Boolean(pRest.length) && <View style={styles.hDividerBottom}></View> }
           </View>
+          {
+            Boolean(pRest.length) && 
+            <React.Fragment>
+              <View style={styles.spaceContainer}>
+                <View style={styles.sDividerBottom}></View>
+              </View>
+              {
+                pRest.map( (p, idx) => (
+                  <View style={styles.audioNodeContainer}>
+                    <View style={idx === pRest.length && styles.nhDividerBottom || styles.nhDividerBottomFull}></View>
+                    <View style={styles.nvDividerBottom}></View>
+                  </View>
+                ))
+              }
+            </React.Fragment>
+          }
       </View>
     </View>
   );
@@ -88,8 +105,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderWidth: 1,
     borderRadius: 6,
-    borderColor: '#38A484',
-    width: 250
+    borderColor: 'blue',
+    width: 250,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 30,
   },
   imageBlock: {
     flexDirection: 'column',
@@ -113,25 +138,18 @@ const styles = StyleSheet.create({
   },
   soundContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    backgroundColor: 'yellow',
-    paddingVertical: 6,
-    paddingHorizontal: 15
+    marginHorizontal: 15,
+    width: 50,
+    height: 60
   },
-  audioBlock: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    marginHorizontal: 15
-  },
-  listContainer: {
+  nodeContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: '#fff',
     width: '100%',
     marginHorizontal: 10,
-    borderColor: 'red',
   },
   hScrollerView: {
     flexDirection: 'row',
@@ -142,8 +160,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: '#fff',
     width: '15%',
+    height: 50,
+    position: 'relative',
+  },
+  spaceContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    width: '51%',
+    height: 50,
+    position: 'relative',
+  },
+  audioNodeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    width: 75,
     height: 50,
     position: 'relative',
   },
@@ -167,6 +200,46 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 7,
     bottom: 0
+  },
+  hDividerBottom: {
+    borderRightColor: '#38A484',
+    borderWidth: 0.5,
+    width: 7,
+    position: 'absolute',
+    right: 0,
+    bottom: 10
+  },
+  sDividerBottom: {
+    borderRightColor: '#38A484',
+    borderWidth: 0.5,
+    width: '100%',
+    position: 'absolute',
+    right: 0,
+    bottom: 10
+  },
+  nhDividerBottom: {
+    borderRightColor: '#38A484',
+    borderWidth: 0.5,
+    width: 50,
+    position: 'absolute',
+    left: 0,
+    bottom: 10,
+  },
+  nhDividerBottomFull: {
+    borderRightColor: '#38A484',
+    borderWidth: 0.5,
+    width: 75,
+    position: 'absolute',
+    left: 0,
+    bottom: 10,
+  },
+  nvDividerBottom: {
+    borderRightColor: '#38A484',
+    borderWidth: 0.5,
+    height: 10,
+    position: 'absolute',
+    left: 50,
+    bottom: 0,
   }
 });
 
