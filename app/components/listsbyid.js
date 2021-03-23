@@ -66,11 +66,9 @@ const Item = ({ root, child, idx }) => (
 
 
 const ListsById = ({ data }) => {
-  const renderItem = ({ item, index }) => {
-		console.log('Index ', index, ' has length of ', item.child.length ,' and is ', Boolean(item.child.length), ' - ', item.child);
-
-   return (<Item root={item.root} child={item.child} idx={index} />);
-	};
+  const renderItem = ({ item, index }) => (
+		<Item root={item.root} child={item.child} idx={index} />
+	);
 
   return (
     <React.Fragment>
