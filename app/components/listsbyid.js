@@ -4,82 +4,81 @@ import { Section } from '.';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faDotCircle } from '@fortawesome/free-solid-svg-icons';
 
-const Item = ({ data }) => {
-  let clone = Boolean(data.phrases) && Boolean(data.phrases.length) && [ ...data.phrases ] || [];
-  let pRoot = Boolean(clone.length) && clone.shift() || data;
-  let pRest = clone;
+const Item = ({ root, child, idx, maxlist, maxchild }) => (
+	<View style={styles.row}>
+		{
+				Boolean(idx > 0 ) &&
+				<View style={styles.nodeContainer}>
+					<View style={styles.dotContainer}>
+						<View style={styles.vDividerTop}></View>
+						<FontAwesomeIcon icon={ faDotCircle } style={styles.dotCircle} />
+						<View style={styles.vDividerBottom}></View>
+						{ Boolean(child.length) && <View style={styles.hDividerBottom}></View> }
+					</View>
+					{
+						Boolean(child.length > 0) && 
+						<React.Fragment>
+							<View style={styles.spaceContainer}>
+									<View style={styles.sDividerBottom}></View>
+							</View>
+							{
+									child.map( (p, idx) => (
+											<View key={idx} style={styles.audioNodeContainer}>
+													<View style={idx === maxchild && styles.nhDividerBottom || styles.nhDividerBottomFull}></View>
+													<View style={styles.nvDividerBottom}></View>
+											</View>
+									))
+							}
+						</React.Fragment>
+					}
+			</View>
+		}
+		<ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.hScrollerView}>
+			<View style={styles.container}>
+				<View style={styles.imageBlock}>
+					<Image 
+						style={styles.image} 
+						source={{
+							uri: Boolean(root.recording) && root.recording.image_url || 'https://www.ajactraining.org/wp-content/uploads/2019/09/image-placeholder.jpg'
+						}} 
+					/>
+				</View>
+				<View style={styles.textBlock}>
+					<Text style={styles.title}>{Boolean(root.recording) && root.recording.title || ""}</Text>
+				</View>
+			</View>
+			{
+				Boolean(child.length) && 
+				child.map( p => (
+					<View key={p.id} style={styles.soundContainer}>
+						<Image 
+							style={styles.image} 
+							source={{
+								uri: Boolean(p.recording) && p.recording.image_url || 'https://www.ajactraining.org/wp-content/uploads/2019/09/image-placeholder.jpg'
+							}} 
+						/>
+					</View>
+				))
+			}
+		</ScrollView>
+	</View>
+);
 
-  return (
-    <View style={styles.row}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.hScrollerView}>
-        <View style={styles.container}>
-          <View style={styles.imageBlock}>
-            <Image 
-              style={styles.image} 
-              source={{
-                uri: Boolean(pRoot.recording) && pRoot.recording.image_url || 'https://www.ajactraining.org/wp-content/uploads/2019/09/image-placeholder.jpg'
-              }} 
-            />
-          </View>
-          <View style={styles.textBlock}>
-            <Text style={styles.title}>{Boolean(pRoot.recording) && pRoot.recording.title || ""}</Text>
-          </View>
-        </View>
-        {
-          Boolean(pRest.length) && 
-          pRest.map( p => (
-            <View key={p.id} style={styles.soundContainer}>
-              <Image 
-                style={styles.image} 
-                source={{
-                  uri: Boolean(p.recording) && p.recording.image_url || 'https://www.ajactraining.org/wp-content/uploads/2019/09/image-placeholder.jpg'
-                }} 
-              />
-            </View>
-          ))
-        }
-      </ScrollView>
-      <View style={styles.nodeContainer}>
-          <View style={styles.dotContainer}>
-            <View style={styles.vDividerTop}></View>
-            <FontAwesomeIcon icon={ faDotCircle } style={styles.dotCircle} />
-            <View style={styles.vDividerBottom}></View>
-            { Boolean(pRest.length) && <View style={styles.hDividerBottom}></View> }
-          </View>
-          {
-            Boolean(pRest.length) && 
-            <React.Fragment>
-              <View style={styles.spaceContainer}>
-                <View style={styles.sDividerBottom}></View>
-              </View>
-              {
-                pRest.map( (p, idx) => (
-                  <View style={styles.audioNodeContainer}>
-                    <View style={idx === pRest.length && styles.nhDividerBottom || styles.nhDividerBottomFull}></View>
-                    <View style={styles.nvDividerBottom}></View>
-                  </View>
-                ))
-              }
-            </React.Fragment>
-          }
-      </View>
-    </View>
-  );
-}
 
-const SubLists = ({ data }) => {
-  const renderItem = ({ item }) => (
-    <Item data={item} />
-  );
+const ListsById = ({ data }) => {
+  const renderItem = ({ item, index }) => {
+		console.log('Index ', index, ' has length of ', item.child.length ,' and is ', Boolean(item.child.length), ' - ', item.child);
+
+   return (<Item root={item.root} child={item.child} idx={index} maxlist={data.list.length - 1} />);
+	};
 
   return (
     <React.Fragment>
       <Section title={data.title}>
         <Text>{data.id}</Text>
       </Section>
-      <Item data={data.rootPhrase} />
       <FlatList
-        data={data.branches}
+        data={data.list}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
@@ -243,4 +242,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SubLists;
+export default ListsById;

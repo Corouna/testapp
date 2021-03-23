@@ -1,5 +1,6 @@
 import React from 'react';
 import { Conversation } from './../api';
+import { conversionByIdConverter } from './../utils';
 
 export const ConversationContext = React.createContext();
 
@@ -14,7 +15,8 @@ const ConversationState = () => {
 
     const getByID = async (id) => {
         let response = await Conversation.getConversationById(id);
-        setSubConv(response.data);
+        let modifiedData = conversionByIdConverter(response.data);
+        setSubConv(modifiedData);
     }
 
     const clearSubConv = () => {

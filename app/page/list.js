@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, StatusBar } from 'react-native';
-import { Lists, SubLists } from './../components';
+import { Lists, ListsById } from './../components';
 import { ConversationContext } from './../context'; 
 
 const ConversationList = () => {
@@ -12,7 +12,7 @@ const ConversationList = () => {
                 Boolean(conv.length) && !Boolean(subConv) && <Lists data={conv} />
             }
             {
-                Boolean(subConv) && <SubLists data={subConv} />
+                Boolean(subConv) && <ListsById data={subConv} />
             }
         </SafeAreaView>
     );
