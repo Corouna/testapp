@@ -4,7 +4,7 @@ import { Section } from '.';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faDotCircle } from '@fortawesome/free-solid-svg-icons';
 
-const Item = ({ root, child, idx, maxlist, maxchild }) => (
+const Item = ({ root, child, idx }) => (
 	<View style={styles.row}>
 		{
 				Boolean(idx > 0 ) &&
@@ -22,9 +22,9 @@ const Item = ({ root, child, idx, maxlist, maxchild }) => (
 									<View style={styles.sDividerBottom}></View>
 							</View>
 							{
-									child.map( (p, idx) => (
-											<View key={idx} style={styles.audioNodeContainer}>
-													<View style={idx === maxchild && styles.nhDividerBottom || styles.nhDividerBottomFull}></View>
+									child.map( (p, ind) => (
+											<View key={ind} style={styles.audioNodeContainer}>
+													<View style={Boolean(ind === child.length - 1) && styles.nhDividerBottom || styles.nhDividerBottomFull}></View>
 													<View style={styles.nvDividerBottom}></View>
 											</View>
 									))
@@ -69,7 +69,7 @@ const ListsById = ({ data }) => {
   const renderItem = ({ item, index }) => {
 		console.log('Index ', index, ' has length of ', item.child.length ,' and is ', Boolean(item.child.length), ' - ', item.child);
 
-   return (<Item root={item.root} child={item.child} idx={index} maxlist={data.list.length - 1} />);
+   return (<Item root={item.root} child={item.child} idx={index} />);
 	};
 
   return (
