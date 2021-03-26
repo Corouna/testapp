@@ -4,37 +4,35 @@ import { Section } from '.';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faDotCircle } from '@fortawesome/free-solid-svg-icons';
 
-const Item = ({ root, child, idx }) => (
+const Item = ({ root, child, idx, maxidx }) => (
 	<View style={styles.row}>
 		{
-				Boolean(idx > 0 ) &&
-				<View style={styles.nodeContainer}>
-					<View style={styles.dotContainer}>
-						<View style={styles.vDividerTop}></View>
-						<FontAwesomeIcon icon={ faDotCircle } style={styles.dotCircle} />
-						<View style={styles.vDividerBottom}></View>
-						{ Boolean(child.length) && <View style={styles.hDividerBottom}></View> }
-					</View>
-					{
-						Boolean(child.length > 0) && 
-						<React.Fragment>
-							<View style={styles.spaceContainer}>
-									<View style={styles.sDividerBottom}></View>
-							</View>
-							{
-									child.map( (p, ind) => (
-											<View key={ind} style={styles.audioNodeContainer}>
-													<View style={Boolean(ind === child.length - 1) && styles.nhDividerBottom || styles.nhDividerBottomFull}></View>
-													<View style={styles.nvDividerBottom}></View>
-											</View>
-									))
-							}
-						</React.Fragment>
-					}
+      Boolean(idx > 0 ) &&
+      <View style={styles.hNodeContainer}>
+        <View style={styles.hDotContainer}>
+          <View style={styles.vDividerTop}></View>
+          { Boolean(child.length) && <View style={styles.hDividerBottom}></View> }
+        </View>
+        {
+          Boolean(child.length > 0) && 
+          <React.Fragment>
+            <View style={styles.spaceContainer}>
+                <View style={styles.sDividerBottom}></View>
+            </View>
+            {
+              child.map( (p, ind) => (
+                <View key={ind} style={styles.audioNodeContainer}>
+                    <View style={Boolean(ind === child.length - 1) && styles.nhDividerBottom || styles.nhDividerBottomFull}></View>
+                    <View style={styles.nvDividerBottom}></View>
+                </View>
+              ))
+            }
+          </React.Fragment>
+        }
 			</View>
 		}
 		<ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.hScrollerView}>
-			<View style={styles.container}>
+      <View style={styles.container}>
 				<View style={styles.imageBlock}>
 					<Image 
 						style={styles.image} 
@@ -61,13 +59,22 @@ const Item = ({ root, child, idx }) => (
 				))
 			}
 		</ScrollView>
+    {
+				Boolean(idx < maxidx) &&
+				<View style={styles.nodeContainer}>
+					<View style={styles.dotContainer}>
+						<View style={styles.vDividerTop}></View>
+						<FontAwesomeIcon icon={ faDotCircle } style={styles.dotCircle} />
+						<View style={styles.vDividerBottom}></View>
+					</View>
+			</View>
+		}
 	</View>
 );
 
-
 const ListsById = ({ data }) => {
   const renderItem = ({ item, index }) => (
-		<Item root={item.root} child={item.child} idx={index} />
+		<Item root={item.root} child={item.child} idx={index} maxidx={data.list.length - 1} />
 	);
 
   return (
@@ -113,6 +120,14 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
     elevation: 30,
   },
+  tContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: 'pink',
+    height: 10,
+    width: '100%'
+  },
   imageBlock: {
     flexDirection: 'column',
     alignItems: 'flex-start',
@@ -148,6 +163,14 @@ const styles = StyleSheet.create({
     width: '100%',
     marginHorizontal: 10,
   },
+  hNodeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: '#fff',
+    width: '100%',
+    marginHorizontal: 10,
+  },
   hScrollerView: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -161,12 +184,20 @@ const styles = StyleSheet.create({
     height: 50,
     position: 'relative',
   },
+  hDotContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    width: '15%',
+    height: 10,
+    position: 'relative',
+  },
   spaceContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
     width: '51%',
-    height: 50,
+    height: 10,
     position: 'relative',
   },
   audioNodeContainer: {
@@ -174,7 +205,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     width: 75,
-    height: 50,
+    height: 10,
     position: 'relative',
   },
   dotCircle: {
